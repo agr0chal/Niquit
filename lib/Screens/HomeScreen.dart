@@ -11,18 +11,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-            'Niquit',
-            style: TextStyle(
-                fontSize: 35,
-                fontFamily: 'Cairo'
-            )
-        ),
-        backgroundColor: Color(0xff1ec8c8),
-        centerTitle: true,
-        elevation: 0,
-      ),
       body: Theme(
           data: ThemeData(fontFamily: 'Montserrat'),
           child: Column(
@@ -36,9 +24,6 @@ class _HomeState extends State<Home> {
               Container(
                 margin: EdgeInsets.fromLTRB(0, 15, 0, 4),
                 height: MediaQuery.of(context).size.width/5,
-                decoration: BoxDecoration(
-                    borderRadius:
-                ),
                 child: Center(
                   child: Column(
                     children: <Widget>[
@@ -140,32 +125,6 @@ class _HomeState extends State<Home> {
               )
             ],
           )
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-          elevation: 0,
-          type: BottomNavigationBarType.fixed,
-          items:<BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text('Home'),
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.show_chart),
-                title: Text('Stats')
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.check_box),
-                title: Text('Tasks')
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.star),
-                title: Text('Trophies')
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.dehaze),
-                title: Text('Menu')
-            )
-          ]
       ),
     );
   }
