@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -6,9 +7,22 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int counter=0;
+  int lungsNumber=1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+            'Niquit',
+            style: TextStyle(
+                fontSize: 35,
+                fontFamily: 'Cairo'
+            )
+        ),
+        backgroundColor: Color(0xff1ec8c8),
+        centerTitle: true,
+        elevation: 0,
+      ),
       body: Theme(
           data: ThemeData(fontFamily: 'Montserrat'),
           child: Column(
@@ -17,11 +31,14 @@ class _HomeState extends State<Home> {
                 height: MediaQuery.of(context).size.width/2.5,
                 width: MediaQuery.of(context).size.width,
                 color: Color(0xff1ec8c8),
-                child: Center(child: Image.asset('images/lungs4 1.png',height: MediaQuery.of(context).size.width/3.25,)),
+                child: Center(child: Image.asset('images/lungs$lungsNumber.png',height: MediaQuery.of(context).size.width/3.25,)),
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 15, 0, 4),
                 height: MediaQuery.of(context).size.width/5,
+                decoration: BoxDecoration(
+                    borderRadius:
+                ),
                 child: Center(
                   child: Column(
                     children: <Widget>[
@@ -48,6 +65,8 @@ class _HomeState extends State<Home> {
                         onPressed: (){
                           setState(() {
                             counter++;
+                            if(counter>7)lungsNumber=2;
+                            if(counter>1.5*7)lungsNumber=3;
                           });
                         },
                         icon: Padding(padding: EdgeInsets.all(10),child: Icon(Icons.smoking_rooms, color: Color(0xffffffff),)),
@@ -62,6 +81,8 @@ class _HomeState extends State<Home> {
                           onPressed: (){
                             setState(() {
                               counter++;
+                              if(counter>7)lungsNumber=2;
+                              if(counter>1.5*7)lungsNumber=3;
                             });
                           },
                           icon: Padding(padding: EdgeInsets.all(10),child: Icon(Icons.smoking_rooms, color: Color(0xffffffff),)),
@@ -119,6 +140,32 @@ class _HomeState extends State<Home> {
               )
             ],
           )
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+          elevation: 0,
+          type: BottomNavigationBarType.fixed,
+          items:<BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.show_chart),
+                title: Text('Stats')
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.check_box),
+                title: Text('Tasks')
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.star),
+                title: Text('Trophies')
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.dehaze),
+                title: Text('Menu')
+            )
+          ]
       ),
     );
   }
