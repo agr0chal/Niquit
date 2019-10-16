@@ -14,7 +14,7 @@ Zmiana jest funkcją liniową, która dla zmiennych:
 
 **y0**=*b*
 
-**y1**=min(6,**y0****20%*)
+**y1**=min(6,**y0***20%)
 
 **x1**=
 
