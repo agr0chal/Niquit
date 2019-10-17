@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './Screens/HomeScreen.dart';
+import './Screens/TasksScreen.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -14,7 +15,7 @@ class MyAppState extends State<MyApp> {
    final _pageOptions = [
      Home(),
      Text('Item 2'),
-     Text('Item 3'),
+     Tasks(),
      Text('Item 4'),
      Text('Item 5'),
    ];
@@ -28,7 +29,7 @@ class MyAppState extends State<MyApp> {
             title: Text(
                 'Niquit',
                 style: TextStyle(
-                    fontSize: 35,
+                    fontSize: 31,
                     fontFamily: 'Cairo'
                 )
             ),
