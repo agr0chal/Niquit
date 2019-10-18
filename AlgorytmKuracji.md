@@ -1,4 +1,4 @@
-# Wielki algorytm rzucania palenia (prawdopodobnie) zgodny z wytycznymi Narodowego Programu Zdrowia oraz Centrum Onkologii by Bartosz Chejchman
+# Wielki algorytm rzucania palenia (prawdopodobnie) zgodny z wytycznymi Narodowego Programu Zdrowia oraz Centrum Onkologii
 
 ## Krótki opis:
 

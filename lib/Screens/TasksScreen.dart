@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Tasks extends StatefulWidget {
   @override
@@ -6,6 +7,25 @@ class Tasks extends StatefulWidget {
 }
 
 class _TasksState extends State<Tasks> {
+   int counter = 0;
+   @override
+    void initState(){
+      super.initState();
+      _CountCigsLoad();
+    }
+    _CountCigsLoad() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        counter = (prefs.getInt('count_cigs') ?? 0);
+      });
+    }
+    _CountCigsAdd() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        counter= (prefs.getInt('count_cigs') ?? 0 ) + 1;
+        prefs.setInt('count_cigs', counter);
+      });
+    }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
