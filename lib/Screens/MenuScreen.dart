@@ -14,6 +14,7 @@ class _MenuScreenState extends State<MenuScreen> {
         child: Column(
           children: <Widget>[
             const SizedBox(height: 48),
+            // INKWELL DO KLIKNIEC (MOZE) 
             Container(
               decoration: firstBoxDecoration(),
               child: Padding(
