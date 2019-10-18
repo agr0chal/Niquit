@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -8,6 +9,42 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int counter=0;
   int lungsNumber=1;
+  @override
+    void initState(){
+      super.initState();
+      _CountCigsLoad();
+      _LungsCheck();
+      _LungsLoad();
+    }
+    _CountCigsLoad() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        counter = (prefs.getInt('count_cigs') ?? 0);
+      });
+    }
+     _LungsLoad() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        lungsNumber = (prefs.getInt('count_lungs') ?? 0);
+      });
+    }
+    _CountCigsAdd() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        counter= (prefs.getInt('count_cigs') ?? 0 ) + 1;
+        prefs.setInt('count_cigs', counter);
+      });
+    }
+    _LungsCheck() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        lungsNumber = (prefs.getInt('count_lungs') ?? 0);
+        counter = (prefs.getInt('count_cigs') ?? 0);
+        if(counter>7)lungsNumber=2;
+        if(counter>1.5*7)lungsNumber=3;
+        prefs.setInt('count_lungs', lungsNumber);
+      });
+    }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,11 +85,8 @@ class _HomeState extends State<Home> {
                       padding: EdgeInsets.all(10),
                       child:RaisedButton.icon(
                         onPressed: (){
-                          setState(() {
-                            counter++;
-                            if(counter>7)lungsNumber=2;
-                            if(counter>1.5*7)lungsNumber=3;
-                          });
+                            _CountCigsAdd();
+                            _LungsCheck();
                         },
                         icon: Padding(padding: EdgeInsets.all(10),child: Icon(Icons.smoking_rooms, color: Color(0xffffffff),)),
                         label: Padding(padding: EdgeInsets.fromLTRB(0,10,10,10),child: Text('Now', style: TextStyle(fontSize: 20, color: Color(0xffffffff)))),
@@ -64,11 +98,8 @@ class _HomeState extends State<Home> {
                         padding: EdgeInsets.all(10),
                         child: RaisedButton.icon(
                           onPressed: (){
-                            setState(() {
-                              counter++;
-                              if(counter>7)lungsNumber=2;
-                              if(counter>1.5*7)lungsNumber=3;
-                            });
+                            _CountCigsAdd();
+                            _LungsCheck();
                           },
                           icon: Padding(padding: EdgeInsets.all(10),child: Icon(Icons.smoking_rooms, color: Color(0xffffffff),)),
                           label: Padding(padding: EdgeInsets.fromLTRB(0,10,10,10),child: Text('Earlier',style: TextStyle(fontSize: 20, color: Color(0xffffffff)))),
