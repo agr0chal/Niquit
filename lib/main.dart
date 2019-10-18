@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './Screens/HomeScreen.dart';
 import './Screens/TasksScreen.dart';
+import './Screens/MenuScreen.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -17,7 +18,7 @@ class MyAppState extends State<MyApp> {
      Text('Item 2'),
      Tasks(),
      Text('Item 4'),
-     Text('Item 5'),
+     MenuScreen(),
    ];
    
     @override
