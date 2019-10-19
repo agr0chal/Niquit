@@ -7,44 +7,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int counter = 0;
-  int lungsNumber = 1;
-  @override
-    void initState(){
-      super.initState();
-      _CountCigsLoad();
-      _LungsCheck();
-      _LungsLoad();
-    }
-    _CountCigsLoad() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      setState(() {
-        counter = (prefs.getInt('count_cigs') ?? 0);
-      });
-    }
-     _LungsLoad() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      setState(() {
-        lungsNumber = (prefs.getInt('count_lungs') ?? 0);
-      });
-    }
-    _CountCigsAdd() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      setState(() {
-        counter= (prefs.getInt('count_cigs') ?? 0 ) + 1;
-        prefs.setInt('count_cigs', counter);
-      });
-    }
-    _LungsCheck() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      setState(() {
-        lungsNumber = (prefs.getInt('count_lungs') ?? 0);
-        counter = (prefs.getInt('count_cigs') ?? 0);
-        if(counter>7)lungsNumber=2;
-        if(counter>1.5*7)lungsNumber=3;
-        prefs.setInt('count_lungs', lungsNumber);
-      });
-    }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +56,6 @@ class _HomeState extends State<Home> {
                       child:RaisedButton.icon(
                         onPressed: (){
                             _CountCigsAdd();
-                            _LungsCheck();
                         },
                         icon: Padding(
                             padding: EdgeInsets.all(10),
@@ -115,7 +77,6 @@ class _HomeState extends State<Home> {
                         child: RaisedButton.icon(
                           onPressed: (){
                             _CountCigsAdd();
-                            _LungsCheck();
                           },
                           icon: Padding(
                               padding: EdgeInsets.all(10),
