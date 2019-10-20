@@ -1,58 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:niquit/data/Tasks.dart';
-<<<<<<< Updated upstream
-
-=======
  
->>>>>>> Stashed changes
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
-
+ 
 class _HomeState extends State<Home> {
   int counter = 0;
   int lungsNumber = 1;
   int taskIndex = 0;
   @override
-<<<<<<< Updated upstream
-    void initState(){
-      super.initState();
-      _CountCigsLoad();
-      _LungsCheck();
-      _LungsLoad();
-    }
-    _CountCigsLoad() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      setState(() {
-        counter = (prefs.getInt('count_cigs') ?? 0);
-      });
-    }
-     _LungsLoad() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      setState(() {
-        lungsNumber = (prefs.getInt('count_lungs') ?? 0);
-      });
-    }
-    _CountCigsAdd() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      setState(() {
-        counter= (prefs.getInt('count_cigs') ?? 0 ) + 1;
-        prefs.setInt('count_cigs', counter);
-      });
-    }
-    _LungsCheck() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      setState(() {
-        lungsNumber = (prefs.getInt('count_lungs') ?? 0);
-        counter = (prefs.getInt('count_cigs') ?? 0);
-        if(counter>7)lungsNumber=2;
-        if(counter>1.5*7)lungsNumber=3;
-        prefs.setInt('count_lungs', lungsNumber);
-      });
-    }
-=======
   void initState() {
     super.initState();
     _CountCigsLoad();
@@ -77,7 +36,6 @@ class _HomeState extends State<Home> {
     });
   }
  
->>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,16 +81,9 @@ class _HomeState extends State<Home> {
                     Container(
                       width: MediaQuery.of(context).size.width / 2,
                       padding: EdgeInsets.all(10),
-<<<<<<< Updated upstream
-                      child:RaisedButton.icon(
-                        onPressed: (){
-                            _CountCigsAdd();
-                            _LungsCheck();
-=======
                       child: RaisedButton.icon(
                         onPressed: () {
                           _CountCigsAdd();
->>>>>>> Stashed changes
                         },
                         icon: Padding(
                             padding: EdgeInsets.all(10),
@@ -154,7 +105,6 @@ class _HomeState extends State<Home> {
                         child: RaisedButton.icon(
                           onPressed: () {
                             _CountCigsAdd();
-                            _LungsCheck();
                           },
                           icon: Padding(
                               padding: EdgeInsets.all(10),
