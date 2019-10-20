@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:niquit/data/Tasks.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -9,6 +10,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int counter = 0;
   int lungsNumber = 1;
+  int taskIndex = 0;
   @override
     void initState(){
       super.initState();
@@ -148,7 +150,14 @@ class _HomeState extends State<Home> {
                     width: MediaQuery.of(context).size.width / 6,
                     height: MediaQuery.of(context).size.height / 5,
                     child: FlatButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          if (taskIndex == 0)
+                            taskIndex = 2;
+                          else
+                            taskIndex -= 1;
+                        });
+                      },
                       child: Image.asset('images/arrow.png'),
                       color: null,
                     ),
@@ -157,6 +166,17 @@ class _HomeState extends State<Home> {
                     child: AspectRatio(
                       aspectRatio: 2.8,
                       child: Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Center(
+                          child: Text(
+                            tasks[taskIndex],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontFamily: 'Montserrat',
+                            ),
+                          ),
+                        ),
                         /* height: MediaQuery.of(context).size.height/6,
                     width: MediaQuery.of(context).size.width/1.5,*/
                         decoration: BoxDecoration(
@@ -170,13 +190,20 @@ class _HomeState extends State<Home> {
                     width: MediaQuery.of(context).size.width / 6,
                     height: MediaQuery.of(context).size.height / 5,
                     child: FlatButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          if (taskIndex == 2)
+                            taskIndex = 0;
+                          else
+                            taskIndex += 1;
+                        });
+                      },
                       child: Image.asset('images/arrow2.png'),
                       color: null,
                     ),
                   )
                 ],
-              )
+              ),
             ],
           )),
     );
