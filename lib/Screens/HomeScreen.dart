@@ -1,13 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+ 
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
-
+ 
 class _HomeState extends State<Home> {
-  
+  int counter = 0;
+  int lungsNumber = 1;
+  @override
+    void initState(){
+      super.initState();
+      _CountCigsLoad();
+    }
+    _CountCigsLoad() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        counter = (prefs.getInt('count_cigs') ?? 0);
+        if(counter>7)lungsNumber=2;
+        if(counter>1.5*7)lungsNumber=3;
+      });
+    }
+ 
+    _CountCigsAdd() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        counter= (prefs.getInt('count_cigs') ?? 0 ) + 1;
+        if(counter>7)lungsNumber=2;
+        if(counter>1.5*7)lungsNumber=3;
+        prefs.setInt('count_cigs', counter);
+      });
+    }
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
