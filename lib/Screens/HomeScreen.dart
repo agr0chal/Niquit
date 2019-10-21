@@ -12,29 +12,28 @@ class _HomeState extends State<Home> {
   int lungsNumber = 1;
   int taskIndex = 0;
   @override
-  void initState() {
-    super.initState();
-    _CountCigsLoad();
-  }
+    void initState(){
+      super.initState();
+      _CountCigsLoad();
+    }
+    _CountCigsLoad() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        counter = (prefs.getInt('count_cigs') ?? 0);
+        if(counter>7)lungsNumber=2;
+        if(counter>1.5*7)lungsNumber=3;
+      });
+    }
  
-  _CountCigsLoad() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      counter = (prefs.getInt('count_cigs') ?? 0);
-      if (counter > 7) lungsNumber = 2;
-      if (counter > 1.5 * 7) lungsNumber = 3;
-    });
-  }
- 
-  _CountCigsAdd() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      counter = (prefs.getInt('count_cigs') ?? 0) + 1;
-      if (counter > 7) lungsNumber = 2;
-      if (counter > 1.5 * 7) lungsNumber = 3;
-      prefs.setInt('count_cigs', counter);
-    });
-  }
+    _CountCigsAdd() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        counter= (prefs.getInt('count_cigs') ?? 0 ) + 1;
+        if(counter>7)lungsNumber=2;
+        if(counter>1.5*7)lungsNumber=3;
+        prefs.setInt('count_cigs', counter);
+      });
+    }
  
   @override
   Widget build(BuildContext context) {
@@ -81,9 +80,9 @@ class _HomeState extends State<Home> {
                     Container(
                       width: MediaQuery.of(context).size.width / 2,
                       padding: EdgeInsets.all(10),
-                      child: RaisedButton.icon(
-                        onPressed: () {
-                          _CountCigsAdd();
+                      child:RaisedButton.icon(
+                        onPressed: (){
+                            _CountCigsAdd();
                         },
                         icon: Padding(
                             padding: EdgeInsets.all(10),
