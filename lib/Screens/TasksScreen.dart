@@ -12,21 +12,13 @@ class _TasksState extends State<Tasks> {
   @override
   void initState() {
     super.initState();
-    _CountCigsLoad();
+    _countCigsLoad();
   }
 
-  _CountCigsLoad() async {
+  _countCigsLoad() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       counter = (prefs.getInt('count_cigs') ?? 0);
-    });
-  }
-
-  _CountCigsAdd() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      counter = (prefs.getInt('count_cigs') ?? 0) + 1;
-      prefs.setInt('count_cigs', counter);
     });
   }
 

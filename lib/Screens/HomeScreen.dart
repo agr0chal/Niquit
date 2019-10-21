@@ -1,40 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:niquit/data/Tasks.dart';
- 
+import 'package:flutter/cupertino.dart';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
- 
+
 class _HomeState extends State<Home> {
   int counter = 0;
   int lungsNumber = 1;
   int taskIndex = 0;
+
+  Duration initialtimer = new Duration();
+  int selectitem = 1;
   @override
-    void initState(){
-      super.initState();
-      _CountCigsLoad();
-    }
-    _CountCigsLoad() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      setState(() {
-        counter = (prefs.getInt('count_cigs') ?? 0);
-        if(counter>7)lungsNumber=2;
-        if(counter>1.5*7)lungsNumber=3;
-      });
-    }
- 
-    _CountCigsAdd() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      setState(() {
-        counter= (prefs.getInt('count_cigs') ?? 0 ) + 1;
-        if(counter>7)lungsNumber=2;
-        if(counter>1.5*7)lungsNumber=3;
-        prefs.setInt('count_cigs', counter);
-      });
-    }
- 
+  void initState() {
+    super.initState();
+    _countCigsLoad();
+  }
+
+  _countCigsLoad() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      counter = (prefs.getInt('count_cigs') ?? 0);
+      if (counter > 7) lungsNumber = 2;
+      if (counter > 1.5 * 7) lungsNumber = 3;
+    });
+  }
+
+  _countCigsAdd() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      counter = (prefs.getInt('count_cigs') ?? 0) + 1;
+      if (counter > 7) lungsNumber = 2;
+      if (counter > 1.5 * 7) lungsNumber = 3;
+      prefs.setInt('count_cigs', counter);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,9 +85,9 @@ class _HomeState extends State<Home> {
                     Container(
                       width: MediaQuery.of(context).size.width / 2,
                       padding: EdgeInsets.all(10),
-                      child:RaisedButton.icon(
-                        onPressed: (){
-                            _CountCigsAdd();
+                      child: RaisedButton.icon(
+                        onPressed: () {
+                          _countCigsAdd();
                         },
                         icon: Padding(
                             padding: EdgeInsets.all(10),
@@ -103,7 +108,73 @@ class _HomeState extends State<Home> {
                         padding: EdgeInsets.all(10),
                         child: RaisedButton.icon(
                           onPressed: () {
-                            _CountCigsAdd();
+                            //_CountCigsAdd();
+                            initialtimer = Duration(hours: 0, minutes: 0);
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext builder) {
+                                  return SizedBox(
+                                    height: MediaQuery.of(context)
+                                            .copyWith()
+                                            .size
+                                            .height /
+                                        (36/17),
+                                    width: double.infinity,
+                                    child: Column(
+                                      children: <Widget>[
+                                        SizedBox(
+                                          width: double.infinity,
+                                          height: MediaQuery.of(context)
+                                                  .copyWith()
+                                                  .size
+                                                  .height /
+                                              9,
+                                          child: Center(
+                                            child: Text(
+                                              "How long ago have you smoked?",
+                                              style: TextStyle(
+                                                  fontFamily: 'Montserrat',
+                                                  fontSize: 16),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          height: MediaQuery.of(context)
+                                                  .copyWith()
+                                                  .size
+                                                  .height /
+                                              4,
+                                          child: CupertinoTimerPicker(
+                                            mode: CupertinoTimerPickerMode.hm,
+                                            minuteInterval: 1,
+                                            secondInterval: 1,
+                                            initialTimerDuration: initialtimer,
+                                            onTimerDurationChanged:
+                                                (Duration changedtimer) {
+                                              setState(() {
+                                                initialtimer = changedtimer;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          height: MediaQuery.of(context)
+                                                  .copyWith()
+                                                  .size
+                                                  .height /
+                                              9,
+                                          child: FlatButton(
+                                            child: Icon(Icons.check,color: Color(0xffffffff),),
+                                            color: Colors.green,
+                                            onPressed: () {},
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                });
                           },
                           icon: Padding(
                               padding: EdgeInsets.all(10),
