@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:niquit/data/Tasks.dart';
 
 class Tasks extends StatefulWidget {
@@ -12,15 +11,9 @@ class _TasksState extends State<Tasks> {
   @override
   void initState() {
     super.initState();
-    _countCigsLoad();
   }
 
-  _countCigsLoad() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      counter = (prefs.getInt('count_cigs') ?? 0);
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {

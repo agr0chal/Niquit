@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:niquit/CigChart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Stats extends StatefulWidget {
   @override
@@ -12,15 +11,8 @@ class _StatsState extends State<Stats> {
   @override
   void initState() {
     super.initState();
-    _countCigsLoad();
   }
 
-  _countCigsLoad() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      counter = (prefs.getInt('count_cigs') ?? 0);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +20,7 @@ class _StatsState extends State<Stats> {
       body: Theme(
         data: ThemeData(fontFamily: 'Montserrat'),
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.only(top:24,left:24,right:24),
           child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +121,7 @@ class _StatsState extends State<Stats> {
                 ),
                 
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 40),
             ],
           ),
         ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:niquit/data/Tasks.dart';
 import 'package:flutter/cupertino.dart';
+import './../data/CigModel.dart';
+import './../data/Database.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -18,25 +19,37 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _countCigsLoad();
+    setState(() {
+     _countCigsLoad(); 
+    });
   }
 
   _countCigsLoad() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      counter = (prefs.getInt('count_cigs') ?? 0);
+     setState(() {
+       print("siema");
+      DateTime now = DateTime.now();
+      var amt = DBProvider.db.getAmt(now.year, now.month, now.day);
+      amt.then((val) {
+        counter = val;
+      });
+
       if (counter > 7) lungsNumber = 2;
       if (counter > 1.5 * 7) lungsNumber = 3;
     });
   }
 
   _countCigsAdd() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      counter = (prefs.getInt('count_cigs') ?? 0) + 1;
-      if (counter > 7) lungsNumber = 2;
-      if (counter > 1.5 * 7) lungsNumber = 3;
-      prefs.setInt('count_cigs', counter);
+      DateTime now = DateTime.now();
+      Cigs cig = Cigs(
+          id: 69,
+          year: now.year,
+          month: now.month,
+          day: now.day,
+          hour: now.hour,
+          minute: now.minute);
+      DBProvider.db.newCig(cig);
+      _countCigsLoad();
     });
   }
 
@@ -67,11 +80,13 @@ class _HomeState extends State<Home> {
                           child: Text('You have smoked:',
                               style: TextStyle(fontFamily: 'Montserrat'))),
                       Container(
+                        //child: UsingStreamBuilder()
                           child: Text('$counter/7',
                               style: TextStyle(
                                   fontSize: 30,
                                   fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.bold))),
+                                  fontWeight: FontWeight.bold))
+                                  ),
                       Container(
                           child: Text('cigarettes',
                               style: TextStyle(fontFamily: 'Montserrat')))
@@ -87,6 +102,7 @@ class _HomeState extends State<Home> {
                       padding: EdgeInsets.all(10),
                       child: RaisedButton.icon(
                         onPressed: () {
+                          DateTime now = DateTime.now();
                           _countCigsAdd();
                         },
                         icon: Padding(
@@ -118,7 +134,7 @@ class _HomeState extends State<Home> {
                                             .copyWith()
                                             .size
                                             .height /
-                                        (36/17),
+                                        (36 / 17),
                                     width: double.infinity,
                                     child: Column(
                                       children: <Widget>[
@@ -166,7 +182,10 @@ class _HomeState extends State<Home> {
                                                   .height /
                                               9,
                                           child: FlatButton(
-                                            child: Icon(Icons.check,color: Color(0xffffffff),),
+                                            child: Icon(
+                                              Icons.check,
+                                              color: Color(0xffffffff),
+                                            ),
                                             color: Colors.green,
                                             onPressed: () {},
                                           ),
