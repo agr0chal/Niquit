@@ -10,32 +10,36 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int counter = 0;
   int lungsNumber = 1;
   int taskIndex = 0;
+  var _result;
 
   Duration initialtimer = new Duration();
   int selectitem = 1;
   @override
   void initState() {
     super.initState();
-    setState(() {
-     _countCigsLoad(); 
+    DateTime now = DateTime.now();
+    var amt = DBProvider.db.getAmt(now.year, now.month, now.day);
+    amt.then((val) {
+      setState(() {
+        _result = val;
+      });
     });
   }
 
   _countCigsLoad() async {
-     setState(() {
-       print("siema");
-      DateTime now = DateTime.now();
-      var amt = DBProvider.db.getAmt(now.year, now.month, now.day);
-      amt.then((val) {
-        counter = val;
+    DateTime now = DateTime.now();
+    var amt = DBProvider.db.getAmt(now.year, now.month, now.day);
+    //setState(() {
+    amt.then((val) {
+      setState(() {
+        _result = val;
+        if (_result > 7) lungsNumber = 2;
+        if (_result > 1.5 * 7) lungsNumber = 3;
       });
-
-      if (counter > 7) lungsNumber = 2;
-      if (counter > 1.5 * 7) lungsNumber = 3;
     });
+    //});
   }
 
   _countCigsAdd() async {
@@ -49,12 +53,18 @@ class _HomeState extends State<Home> {
           hour: now.hour,
           minute: now.minute);
       DBProvider.db.newCig(cig);
-      _countCigsLoad();
+      //_countCigsLoad();
+      _result+=1;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_result == null) {
+      return new Center(child:CupertinoActivityIndicator(animating:true,radius:10));
+    }
+    if (_result > 7) lungsNumber = 2;
+    if (_result > 1.5 * 7) lungsNumber = 3;
     return Scaffold(
       body: Theme(
           data: ThemeData(fontFamily: 'Montserrat'),
@@ -80,13 +90,12 @@ class _HomeState extends State<Home> {
                           child: Text('You have smoked:',
                               style: TextStyle(fontFamily: 'Montserrat'))),
                       Container(
-                        //child: UsingStreamBuilder()
-                          child: Text('$counter/7',
+                          //child: UsingStreamBuilder()
+                          child: Text('$_result/7',
                               style: TextStyle(
                                   fontSize: 30,
                                   fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.bold))
-                                  ),
+                                  fontWeight: FontWeight.bold))),
                       Container(
                           child: Text('cigarettes',
                               style: TextStyle(fontFamily: 'Montserrat')))
@@ -102,7 +111,6 @@ class _HomeState extends State<Home> {
                       padding: EdgeInsets.all(10),
                       child: RaisedButton.icon(
                         onPressed: () {
-                          DateTime now = DateTime.now();
                           _countCigsAdd();
                         },
                         icon: Padding(
