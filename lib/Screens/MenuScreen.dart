@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:flutter/cupertino.dart';
+import './../data/Database.dart';
+import './../data/globals.dart' as globals;
 
 class MenuScreen extends StatefulWidget {
   @override
@@ -6,6 +10,8 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
+ String onoffhelper = globals.onoff;
+ String cleared = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +20,7 @@ class _MenuScreenState extends State<MenuScreen> {
         child: Column(
           children: <Widget>[
             const SizedBox(height: 48),
-            // INKWELL DO KLIKNIEC (MOZE) 
+            // INKWELL DO KLIKNIEC (MOZE)
             Container(
               decoration: firstBoxDecoration(),
               child: Padding(
@@ -97,57 +103,83 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ),
             const SizedBox(height: 48),
-            Container(
-              decoration: firstBoxDecoration(),
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.settings,
-                      color: Color(0xff5a5a5a),
-                      size: 30,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text('Settings',
-                        style:
-                            TextStyle(fontSize: 18, fontFamily: 'Montserrat')),
-                    Spacer(),
-                    Icon(
-                      Icons.keyboard_arrow_right,
-                      color: Color(0xff5a5a5a),
-                      size: 30,
-                    ),
-                  ],
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  globals.konkurs = !globals.konkurs;
+                  if(globals.konkurs){
+                    
+                    globals.konkurscolor=0xff32CD32;
+                    globals.onoff='ON';
+                    onoffhelper='ON';
+                  }
+                  else{
+                    globals.konkurscolor=0xff5a5a5a;
+                    globals.onoff="OFF";
+                    onoffhelper="OFF";
+                  }
+                });
+              },
+              child: Container(
+                decoration: firstBoxDecoration(),
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.settings,
+                        color: Color(globals.konkurscolor),
+                        size: 30,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text('Tryb konkursowy: $onoffhelper',
+                          style: TextStyle(
+                              fontSize: 18, fontFamily: 'Montserrat', color: Color(globals.konkurscolor))),
+                      Spacer(),
+                    ],
+                  ),
                 ),
               ),
             ),
-            Container(
-              decoration: myBoxDecoration(),
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                      size: 30,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text('Clear data',
-                        style:
-                            TextStyle(fontSize: 18, fontFamily: 'Montserrat',color: Colors.red,)),
-                    Spacer(),
-                    Icon(
-                      Icons.keyboard_arrow_right,
-                      color: Colors.red,
-                      size: 30,
-                    ),
-                  ],
+
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  DBProvider.db.deleteAll();
+                  cleared = 'Done';
+                });
+              },
+              child: Container(
+                decoration: myBoxDecoration(),
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                        size: 30,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text('Clear data',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Montserrat',
+                            color: Colors.red,
+                          )),
+                      Spacer(),
+                        Text('$cleared',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Montserrat',
+                            color: Colors.red,
+                          )),
+                    ],
+                  ),
                 ),
               ),
             ),
