@@ -94,7 +94,7 @@ newCig(Cigs newCig) async {
 
   deleteAll() async {
     final db = await database;
-    db.rawDelete("Delete * from Curation");
-    db.rawDelete("Delete * from Cigarettes");
+    //db.rawDelete("DELETE FROM Curation");
+    db.rawDelete("DELETE FROM Cigarettes");
   }
 }
