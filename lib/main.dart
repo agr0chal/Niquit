@@ -40,9 +40,6 @@ class MyAppState extends State<MyApp> {
         DateTime date = DateTime(now.year,now.month,now.day);
         var phase = date.subtract(Duration(days: 6));
         int diffDays = parsedDate.difference(phase).inDays;
-        print(diffDays);
-        print(phase);
-        print(parsedDate);
         if(diffDays==0){
           //KONIEC FAZY ANALIZY
         }

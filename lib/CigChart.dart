@@ -6,9 +6,9 @@ import 'package:niquit/CigSeries.dart';
 class SimpleTimeSeriesChart extends StatelessWidget {
   const SimpleTimeSeriesChart(this.seriesList);
 
-  factory SimpleTimeSeriesChart.withData() {
+  factory SimpleTimeSeriesChart.withData(List<int> cigsData) {
     return SimpleTimeSeriesChart(
-      _getData(),
+      _getData(cigsData),
     );
   }
 
@@ -37,15 +37,15 @@ class SimpleTimeSeriesChart extends StatelessWidget {
   }
 
   /// Create one series with sample hard coded data.
-  static List<charts.Series<CigSeries, DateTime>> _getData() {
+  static List<charts.Series<CigSeries, DateTime>> _getData(List<int> cigsData) {
     DateTime now = DateTime.now();
     final date = DateTime(now.year, now.month, now.day);
 
     final List<CigSeries> cigs = <CigSeries>[
-      CigSeries(date.subtract(Duration(days: 3)), 3),
-      CigSeries(date.subtract(Duration(days: 2)), 5),
-      CigSeries(date.subtract(Duration(days: 1)), 1),
-      CigSeries(date, 2),
+      CigSeries(date.subtract(Duration(days: 3)), cigsData[0]),
+      CigSeries(date.subtract(Duration(days: 2)), cigsData[1]),
+      CigSeries(date.subtract(Duration(days: 1)), cigsData[2]),
+      CigSeries(date, cigsData[3]),
       /*CigSeries(date.add(new Duration(days: 1)), 0),
       CigSeries(date.add(new Duration(days: 2)), 0),
       CigSeries(date.add(new Duration(days: 3)), 0),*/
