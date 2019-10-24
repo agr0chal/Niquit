@@ -3,7 +3,9 @@ import './Screens/HomeScreen.dart';
 import './Screens/TasksScreen.dart';
 import './Screens/MenuScreen.dart';
 import './Screens/StatsScreen.dart';
-
+import 'package:flutter/services.dart';
+import 'data/Database.dart';
+import 'data/CigModel.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -22,6 +24,37 @@ class MyAppState extends State<MyApp> {
     Text('Item 4'),
     MenuScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    Cigs cig;
+    var obj = DBProvider.db.getCig(1);
+        obj.then((tmp) {
+      setState(() {
+        cig = tmp;
+        String day = cig.day.toString();
+        String month = cig.month.toString();
+        String year = cig.year.toString();
+        var parsedDate = DateTime.parse('$year-$month-$day');
+        DateTime now = DateTime.now();
+        DateTime date = DateTime(now.year,now.month,now.day);
+        var phase = date.subtract(Duration(days: 6));
+        int diffDays = parsedDate.difference(phase).inDays;
+        print(diffDays);
+        print(phase);
+        print(parsedDate);
+        if(diffDays==0){
+          //KONIEC FAZY ANALIZY
+        }
+        
+      });
+    });
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
