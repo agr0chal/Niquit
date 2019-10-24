@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import './../data/CigModel.dart';
 import './../data/Database.dart';
+import './../data/globals.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class _HomeState extends State<Home> {
   int taskIndex = 0;
   Duration timeAgo;
   var _result;
+
 
   Duration initialtimer = new Duration();
   int selectitem = 1;
@@ -50,18 +52,23 @@ class _HomeState extends State<Home> {
     ).show();
   }
 
-  _countCigsLoad() async {
-    DateTime now = DateTime.now();
-    var amt = DBProvider.db.getAmt(now.year, now.month, now.day);
-    //setState(() {
-    amt.then((val) {
-      setState(() {
-        _result = val;
-        if (_result > 7) lungsNumber = 2;
-        if (_result > 1.5 * 7) lungsNumber = 3;
-      });
-    });
-    //});
+  _onAlertButtonPressedNotChanged(context) {
+    Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "ACTION NOT ALLOWED",
+      desc: "Please use the \"Now\" button to add cigarettes, which you have smoked less than 5 minutes ago",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "OK",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          width: 120,
+        )
+      ],
+    ).show();
   }
 
   _countCigsAdd() async {
@@ -75,7 +82,6 @@ class _HomeState extends State<Home> {
           hour: now.hour,
           minute: now.minute);
       DBProvider.db.newCig(cig);
-      //_countCigsLoad();
       _result += 1;
     });
   }
@@ -96,6 +102,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    bool changed = false;
     if (_result == null) {
       return new Center(
           child: CupertinoActivityIndicator(animating: true, radius: 10));
@@ -150,7 +157,6 @@ class _HomeState extends State<Home> {
                         onPressed: () {
                           _countCigsAdd();
                           DateTime now = DateTime.now();
-                          print(now.hour);
                         },
                         icon: Padding(
                             padding: EdgeInsets.all(10),
@@ -220,6 +226,7 @@ class _HomeState extends State<Home> {
                                               setState(() {
                                                 initialtimer = changedtimer;
                                                 timeAgo = changedtimer;
+                                                changed=true;
                                               });
                                             },
                                           ),
@@ -244,17 +251,18 @@ class _HomeState extends State<Home> {
                                                     now.hour - timeAgo.inHours;
                                                 int minuteAgo = now.minute -
                                                     (timeAgo.inMinutes % 60);
-                                                if (hourAgo < 0 ||
+                                                if((initialtimer.inHours==0&&initialtimer.inMinutes%60==0)||changed==false){
+                                                  _onAlertButtonPressedNotChanged(context);
+                                                } else if (hourAgo < 0 ||
                                                     (hourAgo == 0 &&
                                                         minuteAgo < 0)) {
                                                   _onAlertButtonPressed(
                                                       context);
+                                                  changed=false;
                                                 } else if (hourAgo > 0 &&
                                                     minuteAgo < 0) {
                                                   hourAgo -= 1;
                                                   minuteAgo = 60 + minuteAgo;
-                                                  print(hourAgo);
-                                                  print(minuteAgo);
                                                   _countCigsAddSpec(
                                                       69,
                                                       now.year,
@@ -262,9 +270,8 @@ class _HomeState extends State<Home> {
                                                       now.day,
                                                       hourAgo,
                                                       minuteAgo);
+                                                  changed=false;
                                                 } else {
-                                                  print(hourAgo);
-                                                  print(minuteAgo);
                                                   _countCigsAddSpec(
                                                       69,
                                                       now.year,
@@ -272,7 +279,10 @@ class _HomeState extends State<Home> {
                                                       now.day,
                                                       hourAgo,
                                                       minuteAgo);
+                                                  changed=false;
                                                 }
+                                              }else{
+                                                _onAlertButtonPressedNotChanged(context);
                                               }
                                             },
                                           ),
