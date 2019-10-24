@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:niquit/data/Tasks.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import './../data/CigModel.dart';
 import './../data/Database.dart';
+import './../data/globals.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -12,7 +15,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int lungsNumber = 1;
   int taskIndex = 0;
+  Duration timeAgo;
   var _result;
+
 
   Duration initialtimer = new Duration();
   int selectitem = 1;
@@ -28,6 +33,44 @@ class _HomeState extends State<Home> {
     });
   }
 
+  _onAlertButtonPressed(context) {
+    Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "ACTION NOT ALLOWED",
+      desc: "You can't add cigarettes smoked on the previous day",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "OK",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          width: 120,
+        )
+      ],
+    ).show();
+  }
+
+  _onAlertButtonPressedNotChanged(context) {
+    Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "ACTION NOT ALLOWED",
+      desc: "Please use the \"Now\" button to add cigarettes, which you have smoked less than 5 minutes ago",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "OK",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          width: 120,
+        )
+      ],
+    ).show();
+  }
+
   _countCigsAdd() async {
     setState(() {
       DateTime now = DateTime.now();
@@ -39,14 +82,30 @@ class _HomeState extends State<Home> {
           hour: now.hour,
           minute: now.minute);
       DBProvider.db.newCig(cig);
-      _result+=1;
+      _result += 1;
+    });
+  }
+
+  _countCigsAddSpec(id, year, month, day, hour, minute) {
+    setState(() {
+      Cigs cig = Cigs(
+          id: id,
+          year: year,
+          month: month,
+          day: day,
+          hour: hour,
+          minute: minute);
+      DBProvider.db.newCig(cig);
+      _result += 1;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    bool changed = false;
     if (_result == null) {
-      return new Center(child:CupertinoActivityIndicator(animating:true,radius:10));
+      return new Center(
+          child: CupertinoActivityIndicator(animating: true, radius: 10));
     }
     if (_result > 7) lungsNumber = 2;
     if (_result > 1.5 * 7) lungsNumber = 3;
@@ -58,12 +117,12 @@ class _HomeState extends State<Home> {
               Container(
                 height: MediaQuery.of(context).size.width / 2.5,
                 width: MediaQuery.of(context).size.width,
-                color: Color(0xff1ec8c8),
                 child: Center(
                     child: Image.asset(
                   'images/lungs$lungsNumber.png',
                   height: MediaQuery.of(context).size.width / 3.25,
                 )),
+                color: Color(0xff1ec8c8),
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 15, 0, 4),
@@ -97,6 +156,7 @@ class _HomeState extends State<Home> {
                       child: RaisedButton.icon(
                         onPressed: () {
                           _countCigsAdd();
+                          DateTime now = DateTime.now();
                         },
                         icon: Padding(
                             padding: EdgeInsets.all(10),
@@ -110,6 +170,9 @@ class _HomeState extends State<Home> {
                                 style: TextStyle(
                                     fontSize: 20, color: Color(0xffffffff)))),
                         color: Color(0xffff2626),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
                       ),
                     ),
                     Container(
@@ -156,13 +219,14 @@ class _HomeState extends State<Home> {
                                               4,
                                           child: CupertinoTimerPicker(
                                             mode: CupertinoTimerPickerMode.hm,
-                                            minuteInterval: 1,
-                                            secondInterval: 1,
+                                            minuteInterval: 5,
                                             initialTimerDuration: initialtimer,
                                             onTimerDurationChanged:
                                                 (Duration changedtimer) {
                                               setState(() {
                                                 initialtimer = changedtimer;
+                                                timeAgo = changedtimer;
+                                                changed=true;
                                               });
                                             },
                                           ),
@@ -180,7 +244,47 @@ class _HomeState extends State<Home> {
                                               color: Color(0xffffffff),
                                             ),
                                             color: Colors.green,
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              DateTime now = DateTime.now();
+                                              if (timeAgo != null) {
+                                                int hourAgo =
+                                                    now.hour - timeAgo.inHours;
+                                                int minuteAgo = now.minute -
+                                                    (timeAgo.inMinutes % 60);
+                                                if((initialtimer.inHours==0&&initialtimer.inMinutes%60==0)||changed==false){
+                                                  _onAlertButtonPressedNotChanged(context);
+                                                } else if (hourAgo < 0 ||
+                                                    (hourAgo == 0 &&
+                                                        minuteAgo < 0)) {
+                                                  _onAlertButtonPressed(
+                                                      context);
+                                                  changed=false;
+                                                } else if (hourAgo > 0 &&
+                                                    minuteAgo < 0) {
+                                                  hourAgo -= 1;
+                                                  minuteAgo = 60 + minuteAgo;
+                                                  _countCigsAddSpec(
+                                                      69,
+                                                      now.year,
+                                                      now.month,
+                                                      now.day,
+                                                      hourAgo,
+                                                      minuteAgo);
+                                                  changed=false;
+                                                } else {
+                                                  _countCigsAddSpec(
+                                                      69,
+                                                      now.year,
+                                                      now.month,
+                                                      now.day,
+                                                      hourAgo,
+                                                      minuteAgo);
+                                                  changed=false;
+                                                }
+                                              }else{
+                                                _onAlertButtonPressedNotChanged(context);
+                                              }
+                                            },
                                           ),
                                         ),
                                       ],
@@ -200,6 +304,9 @@ class _HomeState extends State<Home> {
                                   style: TextStyle(
                                       fontSize: 20, color: Color(0xffffffff)))),
                           color: Color(0xffffb726),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
                         ))
                   ]),
               //Container(
@@ -218,7 +325,7 @@ class _HomeState extends State<Home> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 6,
                     height: MediaQuery.of(context).size.height / 5,
-                    child: FlatButton(
+                    child: IconButton(
                       onPressed: () {
                         setState(() {
                           if (taskIndex == 0)
@@ -227,7 +334,11 @@ class _HomeState extends State<Home> {
                             taskIndex -= 1;
                         });
                       },
-                      child: Image.asset('images/arrow.png'),
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        size: 50,
+                        color: Color(0xff008585),
+                      ),
                       color: null,
                     ),
                   ),
@@ -258,7 +369,7 @@ class _HomeState extends State<Home> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 6,
                     height: MediaQuery.of(context).size.height / 5,
-                    child: FlatButton(
+                    child: IconButton(
                       onPressed: () {
                         setState(() {
                           if (taskIndex == 2)
@@ -267,7 +378,8 @@ class _HomeState extends State<Home> {
                             taskIndex += 1;
                         });
                       },
-                      child: Image.asset('images/arrow2.png'),
+                      icon: Icon(Icons.arrow_forward_ios,
+                          size: 50, color: Color(0xff008585)),
                       color: null,
                     ),
                   )
