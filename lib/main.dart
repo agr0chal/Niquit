@@ -21,7 +21,6 @@ class MyAppState extends State<MyApp> {
     Home(),
     Stats(),
     Tasks(),
-    Text('Item 4'),
     MenuScreen(),
   ];
 
@@ -89,8 +88,6 @@ class MyAppState extends State<MyApp> {
                   icon: Icon(Icons.show_chart), title: Text('Stats')),
               BottomNavigationBarItem(
                   icon: Icon(Icons.check_box), title: Text('Tasks')),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.star), title: Text('Trophies')),
               BottomNavigationBarItem(
                   icon: Icon(Icons.dehaze), title: Text('Menu'))
             ],

@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import './../data/CigModel.dart';
 import './../data/Database.dart';
-import './../data/globals.dart';
 
 class Home extends StatefulWidget {
   @override
