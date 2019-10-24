@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:niquit/data/Tasks.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import './../data/CigModel.dart';
 import './../data/Database.dart';
 
@@ -28,6 +29,25 @@ class _HomeState extends State<Home> {
         _result = val;
       });
     });
+  }
+
+  _onAlertButtonPressed(context) {
+    Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "ACTION NOT ALLOWED",
+      desc: "You can't add cigarettes smoked on the previous day",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "OK",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          width: 120,
+        )
+      ],
+    ).show();
   }
 
   _countCigsLoad() async {
@@ -129,7 +149,7 @@ class _HomeState extends State<Home> {
                       child: RaisedButton.icon(
                         onPressed: () {
                           _countCigsAdd();
-                          DateTime now= DateTime.now();
+                          DateTime now = DateTime.now();
                           print(now.hour);
                         },
                         icon: Padding(
@@ -219,14 +239,20 @@ class _HomeState extends State<Home> {
                                             color: Colors.green,
                                             onPressed: () {
                                               DateTime now = DateTime.now();
-                                              if(timeAgo!=null){
-                                                int hourAgo=now.hour-timeAgo.inHours;
-                                                int minuteAgo=now.minute-(timeAgo.inMinutes%60);
-                                                if(hourAgo<0||(hourAgo==0&&minuteAgo<0)){
-                                                  //nie wiem jeszcze, coś z poprzednim dniem
-                                                }else if(hourAgo>0&&minuteAgo<0){
-                                                  hourAgo-=1;
-                                                  minuteAgo=60+minuteAgo;
+                                              if (timeAgo != null) {
+                                                int hourAgo =
+                                                    now.hour - timeAgo.inHours;
+                                                int minuteAgo = now.minute -
+                                                    (timeAgo.inMinutes % 60);
+                                                if (hourAgo < 0 ||
+                                                    (hourAgo == 0 &&
+                                                        minuteAgo < 0)) {
+                                                  _onAlertButtonPressed(
+                                                      context);
+                                                } else if (hourAgo > 0 &&
+                                                    minuteAgo < 0) {
+                                                  hourAgo -= 1;
+                                                  minuteAgo = 60 + minuteAgo;
                                                   print(hourAgo);
                                                   print(minuteAgo);
                                                   _countCigsAddSpec(
@@ -236,7 +262,7 @@ class _HomeState extends State<Home> {
                                                       now.day,
                                                       hourAgo,
                                                       minuteAgo);
-                                                }else{
+                                                } else {
                                                   print(hourAgo);
                                                   print(minuteAgo);
                                                   _countCigsAddSpec(
