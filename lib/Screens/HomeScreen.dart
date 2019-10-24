@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import './../data/CigModel.dart';
 import './../data/Database.dart';
-import './../data/globals.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -156,7 +155,6 @@ class _HomeState extends State<Home> {
                       child: RaisedButton.icon(
                         onPressed: () {
                           _countCigsAdd();
-                          DateTime now = DateTime.now();
                         },
                         icon: Padding(
                             padding: EdgeInsets.all(10),
