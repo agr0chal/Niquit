@@ -22,7 +22,7 @@ class SimpleTimeSeriesChart extends StatelessWidget {
         seriesList,
         defaultRenderer:
             new charts.LineRendererConfig(includeArea: true, stacked: false),
-        animate: false,
+        animate: true,
         dateTimeFactory: const charts.LocalDateTimeFactory(),
         domainAxis: charts.DateTimeAxisSpec(
           tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(

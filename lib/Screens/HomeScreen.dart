@@ -28,20 +28,6 @@ class _HomeState extends State<Home> {
     });
   }
 
-  _countCigsLoad() async {
-    DateTime now = DateTime.now();
-    var amt = DBProvider.db.getAmt(now.year, now.month, now.day);
-    //setState(() {
-    amt.then((val) {
-      setState(() {
-        _result = val;
-        if (_result > 7) lungsNumber = 2;
-        if (_result > 1.5 * 7) lungsNumber = 3;
-      });
-    });
-    //});
-  }
-
   _countCigsAdd() async {
     setState(() {
       DateTime now = DateTime.now();
@@ -53,7 +39,6 @@ class _HomeState extends State<Home> {
           hour: now.hour,
           minute: now.minute);
       DBProvider.db.newCig(cig);
-      //_countCigsLoad();
       _result+=1;
     });
   }
