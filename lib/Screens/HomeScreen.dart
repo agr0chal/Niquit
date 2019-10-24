@@ -156,7 +156,6 @@ class _HomeState extends State<Home> {
                       child: RaisedButton.icon(
                         onPressed: () {
                           _countCigsAdd();
-                          DateTime now = DateTime.now();
                         },
                         icon: Padding(
                             padding: EdgeInsets.all(10),
