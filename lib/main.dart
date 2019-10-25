@@ -6,6 +6,9 @@ import './Screens/StatsScreen.dart';
 import 'package:flutter/services.dart';
 import 'data/Database.dart';
 import 'data/CigModel.dart';
+import 'data/globals.dart' as globals;
+import 'data/Algorithm.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -23,13 +26,21 @@ class MyAppState extends State<MyApp> {
     Tasks(),
     MenuScreen(),
   ];
-
+  int cureCount;
   @override
   void initState() {
     super.initState();
+    int _war;
+    var all = DBProvider.db.getAll();
+    all.then((val) {
+      setState(() {
+        _war = val;
+      });
+    });
+ 
     Cigs cig;
     var obj = DBProvider.db.getCig(1);
-        obj.then((tmp) {
+    obj.then((tmp) {
       setState(() {
         cig = tmp;
         String day = cig.day.toString();
@@ -37,13 +48,21 @@ class MyAppState extends State<MyApp> {
         String year = cig.year.toString();
         var parsedDate = DateTime.parse('$year-$month-$day');
         DateTime now = DateTime.now();
-        DateTime date = DateTime(now.year,now.month,now.day);
+        DateTime date = DateTime(now.year, now.month, now.day);
         var phase = date.subtract(Duration(days: 6));
         int diffDays = parsedDate.difference(phase).inDays;
-        if(diffDays==0){
-          //KONIEC FAZY ANALIZY
+        var cc = DBProvider.db.getAllCure();
+        cc.then((ccval) {
+            cureCount = ccval;
+            print(ccval);
+        });
+        print('EEEEE:');
+        print(cureCount);
+        if (diffDays >= 0 && (cureCount <= 6 || cureCount == null)) {
+          //dodanie warunku czy już istnieje
+          int average = (_war / 5).round();
+          algorithm(average);
         }
-        
       });
     });
     SystemChrome.setPreferredOrientations([
