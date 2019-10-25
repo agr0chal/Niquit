@@ -6,7 +6,7 @@ import './Screens/StatsScreen.dart';
 import 'package:flutter/services.dart';
 import 'data/Database.dart';
 import 'data/CigModel.dart';
-import 'data/globals.dart' as globals;
+import 'data/globals.dart';
 import 'data/Algorithm.dart';
 
 void main() => runApp(MyApp());
@@ -29,11 +29,10 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    int _war;
     var all = DBProvider.db.getAll();
     all.then((val) {
       setState(() {
-        _war = val;
+        war = val;
       });
     });
  
@@ -52,7 +51,7 @@ class MyAppState extends State<MyApp> {
         int diffDays = parsedDate.difference(phase).inDays;
         if (diffDays >= 0) {
           //dodanie warunku czy już istnieje
-          int average = (_war / 5).round();
+          int average = (war / 5).round();
           algorithm(average);
         }
       });
