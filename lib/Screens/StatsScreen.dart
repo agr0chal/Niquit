@@ -11,7 +11,9 @@ class Stats extends StatefulWidget {
 class _StatsState extends State<Stats> {
   int counter = 0;
   int index = 0;
+  int curdex = 0;
   List<int> cigsData = [-1,-1,-1,-1];
+  List<int> cureData = [-1,-1,-1,-1,-1,-1,-1];
   @override
   void initState() {
     super.initState();
@@ -26,11 +28,23 @@ class _StatsState extends State<Stats> {
         });
       });
     }
+  
+    for (int i = 3; i >= -3; i--) {
+      DateTime date = now.subtract(Duration(days: i));
+      var amt = DBProvider.db.getSpecCure(date.year, date.month, date.day);
+      amt.then((val) {
+        setState(() {
+          cureData[curdex] = val;
+          curdex++;
+        });
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (cigsData[3] == -1) {
+    if (cigsData[3] == -1||cureData[6] == -1) {
+     // + czy jestesmy juz w kuracji
       return new Center(
           child: CupertinoActivityIndicator(animating: true, radius: 10));
     }
@@ -46,7 +60,7 @@ class _StatsState extends State<Stats> {
                 Text('Charts',
                     style: TextStyle(fontSize: 24, fontFamily: 'Montserrat')),
                 const SizedBox(height: 16),
-                SimpleTimeSeriesChart.withData(cigsData),
+                SimpleTimeSeriesChart.withData(cigsData,cureData),
                 const SizedBox(height: 4),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,

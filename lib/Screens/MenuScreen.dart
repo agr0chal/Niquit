@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import './../data/Database.dart';
+import './../data/Algorithm.dart';
 import './../data/globals.dart' as globals;
 
 class MenuScreen extends StatefulWidget {
@@ -134,10 +135,13 @@ class _MenuScreenState extends State<MenuScreen> {
                     globals.konkurscolor = 0xff32CD32;
                     globals.onoff = 'ON';
                     onoffhelper = 'ON';
+                    int average = 20;
+                    algorithm(average);
                   } else {
                     globals.konkurscolor = 0xff5a5a5a;
                     globals.onoff = "OFF";
                     onoffhelper = "OFF";
+                    DBProvider.db.deleteAll();
                   }
                 });
               },
