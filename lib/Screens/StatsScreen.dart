@@ -55,7 +55,8 @@ class _StatsState extends State<Stats> {
 
   @override
   Widget build(BuildContext context) {
-    double savings=-1*(diffDays*war/5-cigsAll*1.50);
+    double savings=0;
+    if(diffDays>=5&&war!=null) savings=-1*(diffDays*war/5-cigsAll*1.50);
     if (cigsData[3] == -1||cureData[6] == -1) {
      // + czy jestesmy juz w kuracji
       return new Center(
