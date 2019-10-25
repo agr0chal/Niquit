@@ -26,7 +26,6 @@ class MyAppState extends State<MyApp> {
     Tasks(),
     MenuScreen(),
   ];
-  int cureCount;
   @override
   void initState() {
     super.initState();
@@ -51,14 +50,7 @@ class MyAppState extends State<MyApp> {
         DateTime date = DateTime(now.year, now.month, now.day);
         var phase = date.subtract(Duration(days: 6));
         int diffDays = parsedDate.difference(phase).inDays;
-        var cc = DBProvider.db.getAllCure();
-        cc.then((ccval) {
-            cureCount = ccval;
-            print(ccval);
-        });
-        print('EEEEE:');
-        print(cureCount);
-        if (diffDays >= 0 && (cureCount <= 6 || cureCount == null)) {
+        if (diffDays >= 0) {
           //dodanie warunku czy już istnieje
           int average = (_war / 5).round();
           algorithm(average);
