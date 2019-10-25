@@ -26,6 +26,7 @@ class MyAppState extends State<MyApp> {
     Tasks(),
     MenuScreen(),
   ];
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +37,6 @@ class MyAppState extends State<MyApp> {
         _war = val;
       });
     });
- 
     Cigs cig;
     var obj = DBProvider.db.getCig(1);
     obj.then((tmp) {
@@ -48,10 +48,8 @@ class MyAppState extends State<MyApp> {
         var parsedDate = DateTime.parse('$year-$month-$day');
         DateTime now = DateTime.now();
         DateTime date = DateTime(now.year, now.month, now.day);
-        var phase = date.subtract(Duration(days: 6));
-        int diffDays = parsedDate.difference(phase).inDays;
-        if (diffDays >= 0) {
-          //dodanie warunku czy już istnieje
+        int diffDays = date.difference(parsedDate).inDays;
+        if (diffDays >= 5) {
           int average = (_war / 5).round();
           algorithm(average);
         }
