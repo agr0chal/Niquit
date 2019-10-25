@@ -16,6 +16,9 @@ class _HomeState extends State<Home> {
   int taskIndex = 0;
   Duration timeAgo;
   var _result;
+  var _limit;
+  String displayCounter;
+  var ttamt;
 
 
   Duration initialtimer = new Duration();
@@ -30,6 +33,21 @@ class _HomeState extends State<Home> {
         _result = val;
       });
     });
+
+    var test = DBProvider.db.getAllCure();
+    test.then((tval) {
+      setState(() {
+        ttamt = tval;
+      });
+    });
+
+    var camt = DBProvider.db.getSpecCure(now.year, now.month, now.day);
+    camt.then((cval) {
+      setState(() {
+        _limit = cval;
+      });
+    });
+
   }
 
   _onAlertButtonPressed(context) {
@@ -102,12 +120,19 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     bool changed = false;
-    if (_result == null) {
+    if (_result == null || (_limit == null && ttamt!=0) || ttamt == null) {
       return new Center(
           child: CupertinoActivityIndicator(animating: true, radius: 10));
     }
-    if (_result > 7) lungsNumber = 2;
-    if (_result > 1.5 * 7) lungsNumber = 3;
+    if(_limit!=null){
+    if (_result > _limit) lungsNumber = 2;
+    if (_result > 1.5 * _limit) lungsNumber = 3;
+    }
+    if(_limit!=null){
+       displayCounter = '/$_limit';
+    } else {
+       displayCounter = '';
+    }
     return Scaffold(
       body: Theme(
           data: ThemeData(fontFamily: 'Montserrat'),
@@ -134,7 +159,7 @@ class _HomeState extends State<Home> {
                               style: TextStyle(fontFamily: 'Montserrat'))),
                       Container(
                           //child: UsingStreamBuilder()
-                          child: Text('$_result/7',
+                          child: Text('$_result$displayCounter',
                               style: TextStyle(
                                   fontSize: 30,
                                   fontFamily: 'Montserrat',
