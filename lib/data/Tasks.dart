@@ -1,5 +1,5 @@
   List<String> tasks = [
-    'Smoke 100 cigarettes',
-    'Smoke every 30 minutes',
-    'Smoke 3 cigarettes at once'
+    'Do not exceed the treatment level',
+    'Do not smoke after 8 PM',
+    'Do not smoke between 3 PM and 6 PM'
   ];
