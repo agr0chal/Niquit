@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:niquit/CigChart.dart';
 import './../data/Database.dart';
 import 'package:flutter/cupertino.dart';
+import '../data/globals.dart';
 
 class Stats extends StatefulWidget {
   @override
@@ -14,6 +15,8 @@ class _StatsState extends State<Stats> {
   int curdex = 0;
   List<int> cigsData = [-1,-1,-1,-1];
   List<int> cureData = [-1,-1,-1,-1,-1,-1,-1];
+  int cigsAll;
+
   @override
   void initState() {
     super.initState();
@@ -39,10 +42,20 @@ class _StatsState extends State<Stats> {
         });
       });
     }
+
+    var tmp=DBProvider.db.getAll();
+    tmp.then((val){
+      setState(() {
+        cigsAll=val;
+      });
+    });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
+    double savings=-1*(diffDays*war/5-cigsAll*1.50);
     if (cigsData[3] == -1||cureData[6] == -1) {
      // + czy jestesmy juz w kuracji
       return new Center(
@@ -91,7 +104,7 @@ class _StatsState extends State<Stats> {
                 Text('Savings',
                     style: TextStyle(fontSize: 24, fontFamily: 'Montserrat')),
                 const SizedBox(height: 3),
-                Text('131.57 PLN',
+                Text('$savings',
                     style: TextStyle(
                         fontSize: 23,
                         fontFamily: 'Montserrat',

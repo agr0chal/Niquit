@@ -136,6 +136,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     globals.onoff = 'ON';
                     onoffhelper = 'ON';
                     int average = 20;
+                    globals.war=100;
                     algorithm(average);
                   } else {
                     globals.konkurscolor = 0xff5a5a5a;
