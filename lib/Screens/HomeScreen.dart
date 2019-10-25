@@ -269,6 +269,7 @@ class _HomeState extends State<Home> {
                                                       hourAgo,
                                                       minuteAgo);
                                                   changed=false;
+                                                  Navigator.pop(context);
                                                 } else {
                                                   _countCigsAddSpec(
                                                       69,
@@ -278,6 +279,7 @@ class _HomeState extends State<Home> {
                                                       hourAgo,
                                                       minuteAgo);
                                                   changed=false;
+                                                  Navigator.pop(context);
                                                 }
                                               }else{
                                                 _onAlertButtonPressedNotChanged(context);
