@@ -6,9 +6,9 @@ import 'package:niquit/CigSeries.dart';
 class SimpleTimeSeriesChart extends StatelessWidget {
   const SimpleTimeSeriesChart(this.seriesList);
 
-  factory SimpleTimeSeriesChart.withData(List<int> cigsData) {
+  factory SimpleTimeSeriesChart.withData(List<int> cigsData, List<int> cureData) {
     return SimpleTimeSeriesChart(
-      _getData(cigsData),
+      _getData(cigsData, cureData),
     );
   }
 
@@ -37,7 +37,7 @@ class SimpleTimeSeriesChart extends StatelessWidget {
   }
 
   /// Create one series with sample hard coded data.
-  static List<charts.Series<CigSeries, DateTime>> _getData(List<int> cigsData) {
+  static List<charts.Series<CigSeries, DateTime>> _getData(List<int> cigsData, List<int> cureData) {
     DateTime now = DateTime.now();
     final date = DateTime(now.year, now.month, now.day);
 
@@ -51,13 +51,13 @@ class SimpleTimeSeriesChart extends StatelessWidget {
       CigSeries(date.add(new Duration(days: 3)), 0),*/
     ];
     final List<CigSeries> curation = <CigSeries>[
-      CigSeries(date.subtract(Duration(days: 3)), 4),
-      CigSeries(date.subtract(Duration(days: 2)), 4),
-      CigSeries(date.subtract(Duration(days: 1)), 4),
-      CigSeries(date, 3),
-      CigSeries(date.add(Duration(days: 1)), 3),
-      CigSeries(date.add(Duration(days: 2)), 2),
-      CigSeries(date.add(Duration(days: 3)), 2),
+      CigSeries(date.subtract(Duration(days: 3)), cureData[0]),
+      CigSeries(date.subtract(Duration(days: 2)), cureData[1]),
+      CigSeries(date.subtract(Duration(days: 1)), cureData[2]),
+      CigSeries(date, cureData[3]),
+      CigSeries(date.add(Duration(days: 1)), cureData[4]),
+      CigSeries(date.add(Duration(days: 2)), cureData[5]),
+      CigSeries(date.add(Duration(days: 3)), cureData[6]),
     ];
 
     return <charts.Series<CigSeries, DateTime>>[

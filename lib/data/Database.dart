@@ -33,8 +33,8 @@ class DBProvider {
           "day INTEGER,"
           "hour INTEGER,"
           "minute INTEGER"
-          ");"
-          "CREATE TABLE Curation ("
+          ");");
+      await db.execute("CREATE TABLE Curation ("
           "id INTEGER PRIMARY KEY,"
           "year INTEGER,"
           "month INTEGER,"
@@ -98,18 +98,27 @@ class DBProvider {
         'SELECT COUNT(*) FROM Cigarettes WHERE year=$year AND month=$month AND day=$day'));
   }
 
-  Future<List<Cure>> getSpecCure(year, month, day) async {
-    final db = await database;
-    var res = await db.rawQuery(
-        "SELECT * FROM Curation WHERE year=$year AND month=$month AND day=$day");
-    List<Cure> list =
-        res.isNotEmpty ? res.map((c) => Cure.fromMap(c)).toList() : [];
-    return list;
+  Future<int> getAll() async {
+    var dbClient = await database;
+    return Sqflite.firstIntValue(
+        await dbClient.rawQuery('SELECT COUNT(*) FROM Cigarettes'));
+  }
+
+   Future<int> getAllCure() async {
+    var dbClient = await database;
+    return Sqflite.firstIntValue(
+        await dbClient.rawQuery('SELECT COUNT(*) FROM Curation'));
+  }
+
+  Future<int> getSpecCure(year, month, day) async {
+    final dbClient = await database;
+    return Sqflite.firstIntValue(await dbClient.rawQuery(
+        'SELECT amount FROM Curation WHERE year=$year AND month=$month AND day=$day'));
   }
 
   deleteAll() async {
     final db = await database;
-    //db.rawDelete("DELETE FROM Curation");
+    db.rawDelete("DELETE FROM Curation");
     db.rawDelete("DELETE FROM Cigarettes");
   }
 }
