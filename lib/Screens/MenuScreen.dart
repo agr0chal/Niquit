@@ -159,7 +159,7 @@ class _MenuScreenState extends State<MenuScreen> {
                       SizedBox(
                         width: 10,
                       ),
-                      Text('Competition mode: $onoffhelper',
+                      Text('Tryb konkursowy: $onoffhelper',
                           style: TextStyle(
                               fontSize: 18,
                               fontFamily: 'Montserrat',
@@ -389,8 +389,8 @@ class Donate extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
       ),
-      body: Text('Please donate us ;)',
-          style: TextStyle(fontSize: 35, fontFamily: 'Montserrat')),
+      body: Text('Please donate us',
+          style: TextStyle(fontSize: 110, fontFamily: 'Montserrat')),
     );
   }
 }
